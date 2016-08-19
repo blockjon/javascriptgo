@@ -10,18 +10,20 @@ body {
 	width: 100%;
 }
 #crosshairs {
-	position: absolute;
+	position: fixed;
 	top: 50%;
 	left: 50%;
-	width: 150px;
 	margin-left: -75px;
 	margin-top: -75px;
 	opacity: 0.2;
 	filter: alpha(opacity=20); /* For IE8 and earlier */
 	pointer-events: none;
-    -webkit-transform: rotateX(60deg); /* Chrome, Safari, Opera  */
-    transform: rotateX(60deg);
     z-index: 2000;
+    display: inline-block;
+}
+#crosshairs img {
+	-webkit-transform: rotateX(60deg); /* Chrome, Safari, Opera  */
+    transform: rotateX(60deg);
 }
 #loading_screen {
     text-align: center;
