@@ -70,6 +70,7 @@ var createLocationManager = function(map) {
         if (lastUserLocation === undefined) {
             $("#loading_screen").hide();
             $("#game_interface").show();
+            $("#crosshairs").show();
             _snapTo(location);
         } else {
             _flyTo(location);
