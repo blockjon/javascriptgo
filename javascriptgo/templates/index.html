@@ -1,0 +1,29 @@
+<!doctype html>
+
+<html lang="en">
+    <head>
+        <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+        <meta charset=utf-8/>
+        <title>JavascriptGo</title>
+        <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+        <script src="https://api.mapbox.com/mapbox-gl-js/v0.22.0/mapbox-gl.js"></script>
+        <link href="https://api.mapbox.com/mapbox-gl-js/v0.22.0/mapbox-gl.css" rel="stylesheet" />
+        <script type="text/javascript" src="/static/js/main.js"></script>
+        <link href="/static/css/main.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div id="game_interface">
+            <div id="map"></div>
+            <img src="/static/crosshairs.png" id="crosshairs">
+        </div>
+        <div id="loading_screen" style="display:none;">
+            <div id="loading_info">
+                <div id="loading_info_note">
+                    JavascriptGO uses location.
+                    <br /><br />
+                    Allow location if prompted.
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
