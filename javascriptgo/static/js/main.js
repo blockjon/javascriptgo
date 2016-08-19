@@ -13,40 +13,6 @@ var createLocation = function(lat, lng) {
     };
 };
 
-var createTrack = function(file_name, location_name) {
-    return {
-        'file_name': file_name,
-        'location_name': location_name
-    };
-};
-
-var getGeoJsonBounds = function(geoJSON) {
-    var minLat = null
-        , minLng = null
-        , maxLat = null
-        , maxLng = null;
-    for (var i=0; i<geoJSON.features.length; i++) {
-        for (var j=0; j < geoJSON.features[i].geometry.coordinates.length; j++) {
-            for (var k=0; k < geoJSON.features[i].geometry.coordinates[j].length; k++) {
-                var lngLat = geoJSON.features[i].geometry.coordinates[j][k];
-                if (minLng == null || lngLat[0] < minLng) {
-                    minLng = lngLat[0];
-                }
-                if (maxLng == null || lngLat[0] > maxLng) {
-                    maxLng = lngLat[0];
-                }
-                if (minLat == null || lngLat[1] < minLat) {
-                    minLat = lngLat[1];
-                }
-                if (maxLat == null || lngLat[1] > maxLat) {
-                    maxLat = lngLat[1];
-                }
-            }
-        }
-    }
-    return [[minLng, maxLat], [maxLng, minLat]];
-};
-
 var createLocationManager = function(map) {
     var lastUserLocation;
     var _flyTo = function(location, zoom) {
@@ -98,8 +64,6 @@ $(function() {
 
     // Create map manager.
     var locationManager = createLocationManager(map);
-
-
 
     // Disable ability to move the crosshairs.
     $('#crosshairs').on('dragstart', function(event) { event.preventDefault(); });
