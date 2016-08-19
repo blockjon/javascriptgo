@@ -98,17 +98,20 @@ $(function() {
     // Create map manager.
     var locationManager = createLocationManager(map);
 
-    // Listen for GPS changes detected by the browser.
-    navigator.geolocation.watchPosition(function(position) {
-        locationManager.updateUserLocation(createLocation(
-            position.coords.latitude,
-            position.coords.longitude
-        ));
-    });
+
 
     // Disable ability to move the crosshairs.
     $('#crosshairs').on('dragstart', function(event) { event.preventDefault(); });
 
     $("#loading_screen").show();
 
+    $('body').on('click', '#understand_location_prompt', function(event) {
+        // Listen for GPS changes detected by the browser.
+        navigator.geolocation.watchPosition(function(position) {
+            locationManager.updateUserLocation(createLocation(
+                position.coords.latitude,
+                position.coords.longitude
+            ));
+        });
+    });
 });
