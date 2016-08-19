@@ -68,7 +68,7 @@ $(function() {
     // Disable ability to move the crosshairs.
     $('#crosshairs').on('dragstart', function(event) { event.preventDefault(); });
 
-    $("#loading_screen").show();
+    map.on('load', function () {$("#loading_screen").show();});
 
     $('body').on('click', '#understand_location_prompt', function(event) {
         // Listen for GPS changes detected by the browser.
@@ -79,4 +79,5 @@ $(function() {
             ));
         });
     });
+
 });
