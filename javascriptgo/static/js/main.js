@@ -112,7 +112,7 @@ var createLocationManager = function(map) {
                 bearing: averageBearing + 180,
                 duration: 5000, // make the flying slow
             });
-            $("#bearing").text("Bearing: " + averageBearing + "°");
+            $("#bearing").text("Bearing: " + Math.round(averageBearing) + "°");
         }
     };
 
