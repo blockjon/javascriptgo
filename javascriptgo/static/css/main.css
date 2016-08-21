@@ -20,9 +20,10 @@ body {
 	pointer-events: none;
     z-index: 2000;
     display: inline-block;
+    display: none;
 }
 #crosshairs img {
-	-webkit-transform: rotateX(60deg); /* Chrome, Safari, Opera  */
+    -webkit-transform: rotateX(60deg); /* Chrome, Safari, Opera  */
     transform: rotateX(60deg);
 }
 #loading_screen {
@@ -33,10 +34,28 @@ body {
     width: 300px;
     left: 50%;
     margin-left: -150px;
+    display: none;
 }
 #loading_info_note {
     display: inline-block;
     background: white;
     border: 3px solid grey;
     padding: 15px;
+}
+#game_interface {
+    // visibility: hidden;
+}
+#ok_button {
+    margin-top:10px;
+    height: 40px;
+    width: 100px;
+}
+#waiting_for_location {
+    display: none;
+}
+#debug {
+    z-index: 2000;
+    position: absolute;
+    top: 5px;
+    right: 5px;
 }

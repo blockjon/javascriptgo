@@ -8,26 +8,38 @@
         <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
         <script src="https://api.mapbox.com/mapbox-gl-js/v0.22.0/mapbox-gl.js"></script>
         <link href="https://api.mapbox.com/mapbox-gl-js/v0.22.0/mapbox-gl.css" rel="stylesheet" />
-        <script type="text/javascript" src="/static/js/main.js"></script>
         <link href="/static/css/main.css" rel="stylesheet" />
+        <script type="text/javascript" src="/static/js/compass.js"></script>
+        <script type="text/javascript" src="/static/js/main.js"></script>
     </head>
     <body>
         <div id="game_interface">
             <div id="map"></div>
-            <div style="display:none;" id="crosshairs">
-                <img src="/static/crosshairs.png">
-            </div>
-        </div>
-        <div id="loading_screen" style="display:none;">
-            <div id="loading_info">
-                <div id="loading_info_note">
-                    JavascriptGO uses location.
-                    <br /><br />
-                    Allow location if prompted.
-                    <br />
-                    <button id="understand_location_prompt" style="margin-top:10px; height: 40px;width: 100px;">Ok</button>
+            <div>
+                <div id="crosshairs">
+                    <img src="/static/images/crosshairs.png">
                 </div>
             </div>
+        </div>
+        <div id="loading_screen">
+            <div id="loading_info">
+                <div id="loading_info_note">
+                    <div id="understand_location_prompt_container">
+                        JavascriptGO will request browser geolocation.
+                        <br /><br />
+                        <button id="ok_button">Ok</button>
+                    </div>
+                    <div id="waiting_for_location">
+                        <img src="/static/images/gps.gif"><br />
+                        Waiting for browser GPS.<br /><br />
+                        Allow location if prompted.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="debug">
+            <div id="heading">awaiting heading</div>
+            <div id="bearing">awaiting bearing</div>
         </div>
     </body>
 </html>
