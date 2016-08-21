@@ -132,22 +132,26 @@ var createLocationManager = function(map) {
 
         // Remember this recent location as long as its further than 10 feet
         // away from the very last one.
-        if (recentLocations.length == 0 || distanceInFeet(location, recentLocations[recentLocations.length-1]) > 10) {
+        if (recentLocations.length == 0) {
             recentLocations.push(location);
+            return;
         }
-
-        if (recentLocations.length > 4) {
-            recentLocations.shift();
+        var lastTrackedLocation = recentLocations[recentLocations.length-1];
+        var dinstanceSinceLastLocationUpdate = Math.round(distanceInFeet(location, lastTrackedLocation));
+        if (dinstanceSinceLastLocationUpdate == 0) {
+            return;
         }
-
-        _setBearing();
+        if (dinstanceSinceLastLocationUpdate > 3) {
+            recentLocations.push(location);
+            if (recentLocations.length > 4) {
+                recentLocations.shift();
+            }
+            _setBearing();
+        }
     };
     return {
         'updateUserLocation': function(location) {
             _handleUserLocationUpdate(location);
-        },
-        'setBearing': function() {
-            _setBearing();
         }
     }
 
