@@ -185,14 +185,10 @@ $(function() {
         activateCompass(function(heading) {
             // map.setBearing(heading);
             // Rotate the crosshairs and emit the heading into the top right for reference.
-            $("#crosshairs img").css("-webkit-transform", "rotate(" + heading + "deg)");
-            $("#crosshairs img").css("transform", "rotate(" + heading + "deg)");
+            $("#crosshairs img").css("-webkit-transform", "rotateX(60deg) rotate(" + heading + "deg)");
+            $("#crosshairs img").css("transform", "rotateX(60deg) rotate(" + heading + "deg)");
             $("#heading").text("Compass: " + heading + "°");
         });
-        locationManager.updateUserLocation(createLocation(
-            37.77277130474984,
-            -122.4407333135605
-        ));
     });
 });
 
