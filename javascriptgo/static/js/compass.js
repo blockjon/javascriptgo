@@ -64,30 +64,31 @@ var activateCompass = function(headingChangeCallback) {
 
           // what adjustment we have to add to rotation to allow for current device orientation
           var adjustment = 0;
-          if (defaultOrientation === "landscape") {
-            adjustment -= 90;
-          }
-
-          if (typeof orientation !== "undefined") {
-            var currentOrientation = orientation.split("-");
-
-            if (defaultOrientation !== currentOrientation[0]) {
-              if (defaultOrientation === "landscape") {
-                adjustment -= 270;
-              } else {
-                adjustment -= 90;
-              }
-            }
-
-            if (currentOrientation[1] === "secondary") {
-              adjustment -= 180;
-            }
-          }
+//          if (defaultOrientation === "landscape") {
+//            adjustment -= 90;
+//          }
+//
+//          if (typeof orientation !== "undefined") {
+//            var currentOrientation = orientation.split("-");
+//
+//            if (defaultOrientation !== currentOrientation[0]) {
+//              if (defaultOrientation === "landscape") {
+//                adjustment -= 270;
+//              } else {
+//                adjustment -= 90;
+//              }
+//            }
+//
+//            if (currentOrientation[1] === "secondary") {
+//              adjustment -= 180;
+//            }
+//          }
 
           positionCurrent.hng = heading + adjustment;
 
           var phase = positionCurrent.hng < 0 ? 360 + positionCurrent.hng : positionCurrent.hng;
-          headingChangeCallback(360 - phase | 0);
+          var actualHeading = 360 - phase | 0;
+          headingChangeCallback(actualHeading);
 
         } else {
           // device can't show heading
@@ -107,9 +108,9 @@ var activateCompass = function(headingChangeCallback) {
     window.addEventListener("deviceorientation", onHeadingChange);
 
     navigator.geolocation.watchPosition(locationUpdate, locationUpdateFail, {
-        enableHighAccuracy: false,
-        maximumAge: 30000,
-        timeout: 27000
+        enableHighAccuracy: true,
+        maximumAge: 0,
+        timeout: 15000
     });
 
 };

@@ -61,16 +61,27 @@ var getBearing = function(startLat,startLong,endLat,endLong) {
 var createLocationManager = function(map) {
     var lastUserLocation;
     var recentLocations = [];
-    var _flyTo = function(location, zoom) {
-        if (zoom === undefined) {
-              zoom = 17;
+    var _adjustTo = function(location, newBearing) {
+        if (newBearing !== undefined) {
+            var adjustedBearing = newBearing;
+            if (adjustedBearing > 360) {
+                adjustedBearing -= 360;
+            }
+            if (adjustedBearing < 0) {
+                adjustedBearing += 360;
+            }
+            // map.setBearing(newBearing);
+            $("#thebearing").text("Bearing: " + Math.round(newBearing) + "°");
+            map.easeTo({
+                center: [location.lng, location.lat],
+                bearing: newBearing,
+                duration: 2000
+            });
+        } else {
+            map.flyTo({
+                center: [location.lng, location.lat]
+            });
         }
-        map.flyTo({
-            center: [location.lng, location.lat],
-            zoom: zoom,
-            speed: 0.03, // make the flying slow
-            curve: 1 // change the speed at which it zooms out
-        });
     };
     var _snapTo = function(location, zoom) {
         if (zoom === undefined) {
@@ -79,74 +90,70 @@ var createLocationManager = function(map) {
         map.setCenter([location.lng, location.lat]);
         map.setZoom(zoom);
     };
-    var _setBearing = function() {
+    var _getBearing = function() {
         var bearings = [];
         var averageBearingSum = 0;
-        if (recentLocations.length > 1) {
-            for (var i=0; i< recentLocations.length; i++) {
-                if (i == 0) {
-                    continue;
-                }
-                var thisLocation = recentLocations[i];
-                var lastLocation = recentLocations[i-1];
-                bearings.push(getBearing(
-                    thisLocation.lat,
-                    thisLocation.lng,
-                    lastLocation.lat,
-                    lastLocation.lng
-                ));
-            }
-            for (var i=0; i<bearings.length; i++) {
-                var thisBearing = bearings[i];
-                if (thisBearing > 180) {
-                    thisBearing -= 360;
-                }
-                averageBearingSum += thisBearing;
-            }
-            var averageBearing = averageBearingSum / recentLocations.length;
-            if (averageBearing < 0) {
-                averageBearing += 360;
-            }
-            // Reverse the bearing perspective for the correct camera angle.
-            map.easeTo({
-                bearing: averageBearing + 180,
-                duration: 5000, // make the flying slow
-            });
-            $("#bearing").text("Bearing: " + Math.round(averageBearing) + "°");
+        if (recentLocations.length < 2) {
+            return;
         }
+        var current = recentLocations[recentLocations.length - 1];
+        var previous = recentLocations[recentLocations.length - 2];
+        var bearing = getBearing(
+            current.lat,
+            current.lng,
+            previous.lat,
+            previous.lng
+        )
+        return Math.round(bearing);
     };
 
     var _handleUserLocationUpdate = function(location) {
-        var feetDistance;
-        if (lastUserLocation === undefined) {
+
+        // The last location we logged.
+        var lastTrackedLocation;
+
+        // Distance in feet between current location and last logged.
+        var dinstanceSinceLastLocationUpdate;
+
+        var calculatedBearing;
+
+        var isFirstULU = false;
+
+        // Remember this user location.
+        lastUserLocation = location;
+
+        // Track this in the FIFO queue
+        if (recentLocations.length == 0) {
+            recentLocations.push(location);
+            isFirstULU = true;
+        } else {
+            lastTrackedLocation = recentLocations[recentLocations.length-1];
+        }
+        // If we have a previously tracked location...
+        if (lastTrackedLocation !== undefined) {
+            dinstanceSinceLastLocationUpdate = Math.round(distanceInFeet(
+                location,
+                lastTrackedLocation
+            ));
+            if (dinstanceSinceLastLocationUpdate > 10) {
+                // Only log new locations which are greater than 3 feet from the last logged one.
+                recentLocations.push(location);
+                // Prune oldest locations.
+                if (recentLocations.length > 4) {
+                    recentLocations.shift();
+                }
+                calculatedBearing = _getBearing();
+            }
+        }
+
+        // ----
+        if (isFirstULU) {
             $("#loading_screen").hide();
             $("#game_interface").css('visibility', 'visible');
             $("#crosshairs").show();
             _snapTo(location);
         } else {
-            _flyTo(location);
-        }
-
-        // Remember the last user location.
-        lastUserLocation = location;
-
-        // Remember this recent location as long as its further than 10 feet
-        // away from the very last one.
-        if (recentLocations.length == 0) {
-            recentLocations.push(location);
-            return;
-        }
-        var lastTrackedLocation = recentLocations[recentLocations.length-1];
-        var dinstanceSinceLastLocationUpdate = Math.round(distanceInFeet(location, lastTrackedLocation));
-        if (dinstanceSinceLastLocationUpdate == 0) {
-            return;
-        }
-        if (dinstanceSinceLastLocationUpdate > 3) {
-            recentLocations.push(location);
-            if (recentLocations.length > 4) {
-                recentLocations.shift();
-            }
-            _setBearing();
+            _adjustTo(location, calculatedBearing);
         }
     };
     return {
@@ -154,7 +161,6 @@ var createLocationManager = function(map) {
             _handleUserLocationUpdate(location);
         }
     }
-
 };
 
 $(function() {
