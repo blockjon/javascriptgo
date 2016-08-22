@@ -70,11 +70,10 @@ var createLocationManager = function(map) {
             if (adjustedBearing < 0) {
                 adjustedBearing += 360;
             }
-            // map.setBearing(newBearing);
-            $("#thebearing").text("Map bearing: " + Math.round(newBearing) + "°");
+            $("#thebearing").text("Map bearing: " + Math.round(adjustedBearing) + "°");
             map.easeTo({
                 center: [location.lng, location.lat],
-                bearing: newBearing,
+                bearing: adjustedBearing,
                 duration: 2000
             });
         } else {
@@ -112,10 +111,9 @@ var createLocationManager = function(map) {
 
         // Distance in feet between current location and last logged.
         var dinstanceSinceLastLocationUpdate;
-
         var currentBearing;
-
         var isFirstULU = false;
+        var locationIsInteresting = false;
 
         // Remember this user location.
         lastUserLocation = location;
@@ -133,9 +131,26 @@ var createLocationManager = function(map) {
                 location,
                 lastTrackedLocation
             ));
-            if (dinstanceSinceLastLocationUpdate > 10) {
+            if (dinstanceSinceLastLocationUpdate > 3) {
+                locationIsInteresting = true;
                 // Only log new locations which are greater than 3 feet from the last logged one.
                 recentLocations.push(location);
+
+//                var geoJSON = map.getSource('pointsGeoJSON')._data;
+//                console.log(geoJSON);
+//                geoJSON.features.push({
+//                  "type": "Feature",
+//                  "properties": {},
+//                  "geometry": {
+//                    "type": "Point",
+//                    "coordinates": [
+//                      location.lng,
+//                      location.lat
+//                    ]
+//                  }
+//                });
+//                map.getSource('pointsGeoJSON').setData(geoJSON);
+
                 // Prune oldest locations.
                 if (recentLocations.length > 4) {
                     recentLocations.shift();
@@ -144,13 +159,12 @@ var createLocationManager = function(map) {
             }
         }
 
-        // ----
         if (isFirstULU) {
             $("#loading_screen").hide();
             $("#game_interface").css('visibility', 'visible');
             $("#crosshairs").show();
             _snapTo(location);
-        } else {
+        } else if (locationIsInteresting) {
             _adjustTo(location, currentBearing);
         }
     };
@@ -178,7 +192,26 @@ $(function() {
     // Disable ability to move the crosshairs.
     $('#crosshairs').on('dragstart', function(event) { event.preventDefault(); });
 
-    map.on('load', function () {$("#loading_screen").show();});
+//    map.on('load', function () {
+//        $("#loading_screen").show();
+//        map.addSource('pointsGeoJSON', {
+//            "type": "geojson",
+//            "data": {
+//                "type": "FeatureCollection",
+//                "features": []
+//            }
+//        });
+//
+//        map.addLayer({
+//            "id": "point",
+//            "source": "pointsGeoJSON",
+//            "type": "circle",
+//            "paint": {
+//                "circle-radius": 3,
+//                "circle-color": "#FF0000"
+//            }
+//        });
+//    });
 
     $('body').on('click', '#ok_button', function(event) {
         $("#understand_location_prompt_container").hide();
