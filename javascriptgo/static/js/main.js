@@ -63,7 +63,7 @@ var createLocationManager = function(map) {
     var recentLocations = [];
     var _adjustTo = function(location, newBearing) {
         if (newBearing !== undefined) {
-            var adjustedBearing = newBearing;
+            var adjustedBearing = newBearing + 180;
             if (adjustedBearing > 360) {
                 adjustedBearing -= 360;
             }
@@ -91,10 +91,8 @@ var createLocationManager = function(map) {
         map.setZoom(zoom);
     };
     var _getBearing = function() {
-        var bearings = [];
-        var averageBearingSum = 0;
         if (recentLocations.length < 2) {
-            return;
+            return undefined;
         }
         var current = recentLocations[recentLocations.length - 1];
         var previous = recentLocations[recentLocations.length - 2];
@@ -115,7 +113,7 @@ var createLocationManager = function(map) {
         // Distance in feet between current location and last logged.
         var dinstanceSinceLastLocationUpdate;
 
-        var calculatedBearing;
+        var currentBearing;
 
         var isFirstULU = false;
 
@@ -142,7 +140,7 @@ var createLocationManager = function(map) {
                 if (recentLocations.length > 4) {
                     recentLocations.shift();
                 }
-                calculatedBearing = _getBearing();
+                currentBearing = _getBearing();
             }
         }
 
@@ -153,7 +151,7 @@ var createLocationManager = function(map) {
             $("#crosshairs").show();
             _snapTo(location);
         } else {
-            _adjustTo(location, calculatedBearing);
+            _adjustTo(location, currentBearing);
         }
     };
     return {
