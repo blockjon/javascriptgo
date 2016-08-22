@@ -71,7 +71,7 @@ var createLocationManager = function(map) {
                 adjustedBearing += 360;
             }
             // map.setBearing(newBearing);
-            $("#thebearing").text("Bearing: " + Math.round(newBearing) + "°");
+            $("#thebearing").text("Map bearing: " + Math.round(newBearing) + "°");
             map.easeTo({
                 center: [location.lng, location.lat],
                 bearing: newBearing,
@@ -190,12 +190,12 @@ $(function() {
                 position.coords.longitude
             ));
         });
-        activateCompass(function(heading) {
-            // map.setBearing(heading);
+        activateRotationListener(function(rotation) {
+            var cssRotation = 360 - rotation;
             // Rotate the crosshairs and emit the heading into the top right for reference.
-            $("#crosshairs img").css("-webkit-transform", "rotateX(60deg) rotate(" + heading + "deg)");
-            $("#crosshairs img").css("transform", "rotateX(60deg) rotate(" + heading + "deg)");
-            $("#heading").text("Compass: " + heading + "°");
+            $("#crosshairs img").css("-webkit-transform", "rotateX(60deg) rotate(" + cssRotation + "deg)");
+            $("#crosshairs img").css("transform", "rotateX(60deg) rotate(" + cssRotation + "deg)");
+            $("#heading").text("Crosshairs rotation: " + rotation + "°");
         });
     });
 });
