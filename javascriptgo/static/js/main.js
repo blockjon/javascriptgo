@@ -136,21 +136,6 @@ var createLocationManager = function(map) {
                 // Only log new locations which are greater than 3 feet from the last logged one.
                 recentLocations.push(location);
 
-//                var geoJSON = map.getSource('pointsGeoJSON')._data;
-//                console.log(geoJSON);
-//                geoJSON.features.push({
-//                  "type": "Feature",
-//                  "properties": {},
-//                  "geometry": {
-//                    "type": "Point",
-//                    "coordinates": [
-//                      location.lng,
-//                      location.lat
-//                    ]
-//                  }
-//                });
-//                map.getSource('pointsGeoJSON').setData(geoJSON);
-
                 // Prune oldest locations.
                 if (recentLocations.length > 4) {
                     recentLocations.shift();
@@ -194,23 +179,6 @@ $(function() {
 
     map.on('load', function () {
         $("#loading_screen").show();
-//        map.addSource('pointsGeoJSON', {
-//            "type": "geojson",
-//            "data": {
-//                "type": "FeatureCollection",
-//                "features": []
-//            }
-//        });
-//
-//        map.addLayer({
-//            "id": "point",
-//            "source": "pointsGeoJSON",
-//            "type": "circle",
-//            "paint": {
-//                "circle-radius": 3,
-//                "circle-color": "#FF0000"
-//            }
-//        });
     });
 
     $('body').on('click', '#ok_button', function(event) {
@@ -230,18 +198,5 @@ $(function() {
             $("#crosshairs img").css("transform", "rotateX(60deg) rotate(" + cssRotation + "deg)");
             $("#heading").text("Crosshairs rotation: " + rotation + "°");
         });
-//        setTimeout(function() {
-//            locationManager.updateUserLocation(createLocation(
-//                37.7727882658832,
-//                -122.44083523750305
-//            ));
-//        }, 3000);
-//        setTimeout(function() {
-//            locationManager.updateUserLocation(createLocation(
-//                37.77261865437471,
-//                -122.44184911251067
-//            ));
-//        }, 6000);
     });
 });
-
