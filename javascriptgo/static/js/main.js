@@ -110,7 +110,7 @@ var createLocationManager = function(map) {
         var lastTrackedLocation;
 
         // Distance in feet between current location and last logged.
-        var dinstanceSinceLastLocationUpdate;
+        var distanceSinceLastLocationUpdate;
         var currentBearing;
         var isFirstULU = false;
         var locationIsInteresting = false;
@@ -127,11 +127,11 @@ var createLocationManager = function(map) {
         }
         // If we have a previously tracked location...
         if (lastTrackedLocation !== undefined) {
-            dinstanceSinceLastLocationUpdate = Math.round(distanceInFeet(
+            distanceSinceLastLocationUpdate = Math.round(distanceInFeet(
                 location,
                 lastTrackedLocation
             ));
-            if (dinstanceSinceLastLocationUpdate > 3) {
+            if (distanceSinceLastLocationUpdate > 3) {
                 locationIsInteresting = true;
                 // Only log new locations which are greater than 3 feet from the last logged one.
                 recentLocations.push(location);
